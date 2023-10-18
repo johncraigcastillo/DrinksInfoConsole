@@ -5,9 +5,11 @@ using Spectre.Console;
 
 namespace DrinksInfoConsole.Models;
 
-internal interface IDrinkApi
+public interface IDrinkApi
 {
-    Task<Cocktail?> FetchSingleCocktail();
+    Task<List<Category>?> GetCategoriesAsync();
+    Task<List<Drink>?> GetDrinksByCategoryAsync(string category);
+    Task<Drink?> FetchSingleDrink();
 }
 
 public class DrinkApi : IDrinkApi
@@ -28,16 +30,50 @@ public class DrinkApi : IDrinkApi
         _drinkByIdEndpoint = settings.Value.DrinkByIdEndpoint;
     }
 
-    public async Task<Cocktail?> FetchSingleCocktail()
+    public async Task<Drink?> FetchSingleDrink()
     {
         // todo: pass in id and put it where 11007 is
         var response = await _httpClient.GetAsync($"{_baseUrl}{_drinkByIdEndpoint}11007");
         if (response.IsSuccessStatusCode)
         {
             var responseData = await response.Content.ReadAsStringAsync();
-            var cocktailList = JsonSerializer.Deserialize<CocktailList>(responseData);
+            var cocktailList = JsonSerializer.Deserialize<DrinkList>(responseData);
             var cocktail = cocktailList?.Drinks.FirstOrDefault();
             return cocktail;
+        }
+
+        Console.WriteLine($"Error: {response.StatusCode}");
+        return null;
+    }
+
+    public async Task<List<Category>?> GetCategoriesAsync()
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}{_listCategoryEndpoint}");
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = await response.Content.ReadAsStringAsync();
+            var categoryListObject = JsonSerializer.Deserialize<CategoryList>(responseData);
+            var categoryList = categoryListObject?.Drinks;
+
+
+            return categoryList;
+        }
+
+        Console.WriteLine($"Error: {response.StatusCode}");
+        return null;
+    }
+
+    public async Task<List<Drink>?> GetDrinksByCategoryAsync(string category)
+    {
+        var response = await _httpClient.GetAsync($"{_baseUrl}{_filterByCategoryEndpoint}{category}");
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = await response.Content.ReadAsStringAsync();
+            var drinkListObject = JsonSerializer.Deserialize<DrinkList>(responseData);
+            var drinkList = drinkListObject?.Drinks;
+
+
+            return drinkList;
         }
 
         Console.WriteLine($"Error: {response.StatusCode}");

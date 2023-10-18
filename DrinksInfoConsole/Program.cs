@@ -1,4 +1,5 @@
-﻿using DrinksInfoConsole.Models;
+﻿using DrinksInfoConsole.Controllers;
+using DrinksInfoConsole.Models;
 using DrinksInfoConsole.Services;
 using DrinksInfoConsole.Views;
 using Microsoft.Extensions.Configuration;
@@ -6,19 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DrinksInfoConsole;
 
-public class Program
+public static class Program
 {
     private static async Task Main(string[] args)
     {
         var serviceProvider = ConfigureServices();
-        // var httpClient = serviceProvider.GetService<HttpClient>();
-        // var api = serviceProvider.GetService<IDrinkApi>();
-        // var cocktail = await api.FetchSingleCocktail();
-        // Console.WriteLine(cocktail.StrDrink);
         var app = serviceProvider.GetService<App>();
-        app.Run();
-        
-
+        await app.RunAsync();
     }
 
     private static IServiceProvider ConfigureServices()
@@ -34,6 +29,8 @@ public class Program
         services.Configure<DrinkApiSettings>(configuration.GetSection("DrinkApiSettings"));
         services.AddSingleton<HttpClient>();
         services.AddSingleton<IDrinkApi, DrinkApi>();
+        services.AddSingleton<ApiController>();
+        services.AddSingleton<CategoryListUi>();
         services.AddSingleton<App>();
 
         return services.BuildServiceProvider();
