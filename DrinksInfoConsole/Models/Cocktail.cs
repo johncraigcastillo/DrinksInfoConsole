@@ -1,13 +1,13 @@
 using System.Text.Json.Serialization;
 
-namespace DrinksInfoConsole;
+namespace DrinksInfoConsole.Models;
 
 public class Cocktail
 {
-    public Cocktail(string strDrink)
+    [JsonPropertyName("strDrink")] public string? StrDrink { get; set; }
+
+    public Cocktail(string? strDrink)
     {
         StrDrink = strDrink;
     }
-
-    [JsonPropertyName("strDrink")] public string StrDrink { get; set; }
 }

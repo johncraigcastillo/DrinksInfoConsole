@@ -4,5 +4,5 @@ namespace DrinksInfoConsole.Models;
 
 public class CocktailList
 {
-    [JsonPropertyName("drinks")] public List<Cocktail> Drinks { get; set; }
+    [JsonPropertyName("drinks")] public List<Cocktail>? Drinks { get; set; }
 }
