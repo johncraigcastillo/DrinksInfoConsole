@@ -32,6 +32,7 @@ public static class Program
         services.AddSingleton<ApiController>();
         services.AddSingleton<CategoryListUi>();
         services.AddSingleton<App>();
+        services.AddSingleton<DrinkUi>();
 
         return services.BuildServiceProvider();
     }

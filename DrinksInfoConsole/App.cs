@@ -8,23 +8,25 @@ namespace DrinksInfoConsole;
 public class App
 
 {
-    private readonly CategoryListUi _categoryListUi;
     private readonly ApiController _apiController;
+    private readonly DrinkUi _drinkUi;
 
-    public App(CategoryListUi categoryListUi, ApiController apiController)
+    public App(ApiController apiController, DrinkUi drinkUi)
     {
-        _categoryListUi = categoryListUi;
         _apiController = apiController;
+        _drinkUi = drinkUi;
     }
 
     public async Task RunAsync()
     {
         var categories = await _apiController.GetCategoriesAsync();
         var userCategorySelection = CategoryListUi.GetUserCategorySelection(categories);
-        
+
         var drinks = await _apiController.GetDrinksByCategoryAsync(userCategorySelection);
-        var userDrinkSelection = DrinkListUi.GetUserDrinkSelection(drinks);
-        AnsiConsole.MarkupLine($"{userDrinkSelection.StrDrink}, {userDrinkSelection.IdDrink}");
+        var userDrinkSelectionId = DrinkListUi.GetUserDrinkSelection(drinks);
         
+        var drink = await _apiController.GetDrinkByIdAsync(userDrinkSelectionId);
+        
+        _drinkUi.DisplayDrink(drink);
     }
 }

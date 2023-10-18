@@ -9,7 +9,7 @@ public interface IDrinkApi
 {
     Task<List<Category>?> GetCategoriesAsync();
     Task<List<Drink>?> GetDrinksByCategoryAsync(string category);
-    Task<Drink?> FetchSingleDrink();
+    Task<Drink?> FetchSingleDrink(string? id);
 }
 
 public class DrinkApi : IDrinkApi
@@ -30,10 +30,9 @@ public class DrinkApi : IDrinkApi
         _drinkByIdEndpoint = settings.Value.DrinkByIdEndpoint;
     }
 
-    public async Task<Drink?> FetchSingleDrink()
+    public async Task<Drink?> FetchSingleDrink(string? id)
     {
-        // todo: pass in id and put it where 11007 is
-        var response = await _httpClient.GetAsync($"{_baseUrl}{_drinkByIdEndpoint}11007");
+        var response = await _httpClient.GetAsync($"{_baseUrl}{_drinkByIdEndpoint}{id}");
         if (response.IsSuccessStatusCode)
         {
             var responseData = await response.Content.ReadAsStringAsync();

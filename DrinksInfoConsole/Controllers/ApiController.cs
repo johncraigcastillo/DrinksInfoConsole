@@ -22,4 +22,9 @@ public class ApiController
     {
         return await _drinkApi.GetDrinksByCategoryAsync(category);
     }
+
+    public async Task<Drink?> GetDrinkByIdAsync(string? userDrinkSelectionId)
+    {
+        return await _drinkApi.FetchSingleDrink(userDrinkSelectionId);
+    }
 }
