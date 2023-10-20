@@ -17,9 +17,14 @@ public class ApiController
     {
         return await _drinkApi.GetCategoriesAsync();
     }
-    
+
     public async Task<List<Drink>?> GetDrinksByCategoryAsync(string category)
     {
+        if (category == "Exit")
+        {
+            Environment.Exit(0);
+        }
+
         return await _drinkApi.GetDrinksByCategoryAsync(category);
     }
 

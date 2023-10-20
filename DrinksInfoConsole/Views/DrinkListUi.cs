@@ -7,7 +7,6 @@ public class DrinkListUi
 {
     public static string? GetUserDrinkSelection(IEnumerable<Drink>? drinks)
     {
-        
         var userSelection = AnsiConsole.Prompt(new SelectionPrompt<Drink>()
             .Title("Select a drink")
             .AddChoices(drinks)

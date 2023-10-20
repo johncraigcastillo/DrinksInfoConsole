@@ -19,14 +19,17 @@ public class App
 
     public async Task RunAsync()
     {
-        var categories = await _apiController.GetCategoriesAsync();
-        var userCategorySelection = CategoryListUi.GetUserCategorySelection(categories);
+        while (true)
+        {
+            AnsiConsole.Clear();
+            var categories = await _apiController.GetCategoriesAsync();
+            var userCategorySelection = CategoryListUi.GetUserCategorySelection(categories);
 
-        var drinks = await _apiController.GetDrinksByCategoryAsync(userCategorySelection);
-        var userDrinkSelectionId = DrinkListUi.GetUserDrinkSelection(drinks);
-        
-        var drink = await _apiController.GetDrinkByIdAsync(userDrinkSelectionId);
-        
-        _drinkUi.DisplayDrink(drink);
+            var drinks = await _apiController.GetDrinksByCategoryAsync(userCategorySelection);
+            var userDrinkSelectionId = DrinkListUi.GetUserDrinkSelection(drinks);
+
+            var drink = await _apiController.GetDrinkByIdAsync(userDrinkSelectionId);
+            _drinkUi.DisplayDrink(drink);
+        }
     }
 }
